@@ -1,0 +1,41 @@
+# File: Makefile
+# Project "mtp3transitfilter"
+# (c) 2017 Andreas Fink
+# Create: Andreas Fink (andreas@fink.org)
+#
+#
+
+CC=@CC@
+CFLAGS=@CFLAGS@
+CONFIGURATION=Release
+LDFLAGS=@LDFLAGS@
+
+LIB=plugin_mtp3transitfilter
+
+MFILES = $(wildcard mtp3transitfilter/*.m) $(wildcard mtp3transitfilter/*/*.m)
+HFILES = version.h $(wildcard mtp3transitfilter/*.h) $(wildcard mtp3transitfilter/*/*.h)
+MOFILES  = $(MFILES:.m=.m.o)
+OFILES = $(MOFILES)
+
+INCLUDEDIRS = -I mtp3transitfilter
+
+DEBUG_RELEASE = -DCONFIGURATION_${CONFIGURATION}=1 -DCONFIGURATION=${CONFIGURATION}=1
+
+${LIB}: ${OFILES}
+	./make_version
+	${CC} -shared -o ${LIB}  ${LDFLAGS} ${OFILES} ${LIBS} ${STATIC_LIBS}
+
+install: ${LIB}
+	-mkdir -p ${DESTDIR}/opt/universalss7/mtp3/plugins
+	-install -b -g root -o root -m 644 ${LIB} ${DESTDIR}/opt/universalss7/mtp3/plugins
+
+clean:
+	rm -f $(LIB) $(OFILES)
+
+.SUFFIXES: .m.o .o .m .c
+
+%.m.o:	%.m
+	${CC} -c ${CFLAGS} ${DEBUG_RELEASE} -x objective-c -fobjc-arc $<  ${DEBUG_RELEASE} ${INCLUDEDIRS} -o $@
+
+
+

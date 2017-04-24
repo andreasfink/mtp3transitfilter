@@ -1,0 +1,11 @@
+/* ==================================================================== 
+ * config.h
+ * Project "mtp3transitfilter"
+ * (c) 2002-2016, Andreas Fink, Basel, Switzerland
+ */ 
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+                     
+#endif
